@@ -19,7 +19,7 @@ class Sprite:
 
     def draw(self):
         window.blit(self.image, (self.hitbox.x, self.hitbox.y))
-        pygame.draw.rect(window, (100, 0, 200), self.hitbox, 3)
+        # pygame.draw.rect(window, (100, 0, 200), self.hitbox, 3)
 
 class Player(Sprite):
     def __init__(self, x, y, w, h, image, speed, images):
@@ -139,7 +139,7 @@ class Enemy(Sprite):
         
         self.steps += self.speed
 
-        if self.steps >= 128:
+        if self.steps >= 160:
             self.steps = 0
 
             if self.direction == 0:
@@ -208,10 +208,10 @@ wall_img = pygame.image.load('wall_tile.png')
 key_img = pygame.image.load('key.png')
 door_img = pygame.image.load('door.png')
 
-player_speed = 2
+player_speed = 3
 enemy_speed = 3
 
-player = Player(49, 49, 30, 30, pygame.image.load('player_stand.png'), player_speed, player_images)
+player_size = 30
 
 wall_size = 32
 walls = []
@@ -224,10 +224,14 @@ lasers = []
 
 x, y = 0, 0
 
+player_x, player_y = 0, 0
+
 for row in lvl1:
     for p in str(row):
         if p == '1':
             walls.append(Sprite(x, y, wall_size, wall_size, wall_img))
+        elif p == '9':
+            player_x, player_y = x + 16, y + 16
         elif p == '2':
             enemies.append(Enemy((x + 8), (y - 45), enemy_w, enemy_h, enemy_images[0], enemy_speed, enemy_images))
         elif p == '3':
@@ -243,7 +247,9 @@ start = False
 win = False
 death = False
 
-while game:
+player = Player(player_x, player_y, player_size, player_size, player_images[1], player_speed, player_images)
+
+while game:   
     window.blit(floor_img, (0, 0))
 
     player.draw()
